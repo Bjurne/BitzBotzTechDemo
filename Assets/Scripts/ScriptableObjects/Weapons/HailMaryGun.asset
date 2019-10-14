@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a1c6a3e5c6d734e900ed0401fe3463, type: 3}
+  m_Name: HailMaryGun
+  m_EditorClassIdentifier: 
+  name: HailMaryGun
+  sprite: {fileID: 21300000, guid: d9673d05411210849bbffd76c60d1f37, type: 3}
+  projectilePrefab: {fileID: 7474979750420313728, guid: 63093790221b0cb48ad12af3ee920155,
+    type: 3}
+  projectileSpeed: 3
+  coolDown: 3
+  numberOfProjectiles: 36
+  projectileDeviation: 1
+  weaponRecoilPower: 500
