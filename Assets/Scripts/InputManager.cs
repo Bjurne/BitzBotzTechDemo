@@ -39,17 +39,27 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            playerController.ChangeActiveWeapon(1);
+            playerController.ChangeActiveWeapon(0);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            playerController.ChangeActiveWeapon(2);
+            playerController.ChangeActiveWeapon(1);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            playerController.ChangeActiveWeapon(2);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
             playerController.ChangeActiveWeapon(3);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            playerController.ChangeActiveWeapon(4);
         }
     }
 

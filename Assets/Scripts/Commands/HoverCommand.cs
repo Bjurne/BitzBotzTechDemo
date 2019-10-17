@@ -20,11 +20,14 @@ public class HoverCommand : ICommand
 
     public IEnumerator Hover()
     {
+        PlayerController playerController = playerRigidbody.GetComponent<PlayerController>();
+
         for (int i = 0; i < 30; i++)
         {
-            if (playerRigidbody.GetComponent<PlayerController>().grounded) yield break;
+            if (playerController.grounded) yield break;
             if (playerRigidbody.velocity.y < 5f)
             {
+                playerController.hoverEffectPS.Play();
                 playerRigidbody.AddForce(jumpVector/4);
             }
             yield return new WaitForSeconds(0.1f);

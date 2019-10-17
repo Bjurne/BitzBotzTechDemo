@@ -98,7 +98,8 @@ MonoBehaviour:
   fireingCharacterName: 
   impactParticlesPrefab: {fileID: 1979645945035137476, guid: 1ece7a2e83723e64ba59e96cb9a09139,
     type: 3}
-  sprite: {fileID: 9065229827749413896}
+  sprite: {fileID: 5261802169374607325}
+  targetSeekingMissile: {fileID: 9065229827749413896}
 --- !u!212 &1302662263059549893
 SpriteRenderer:
   m_ObjectHideFlags: 0

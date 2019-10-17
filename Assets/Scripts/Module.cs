@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Module : MonoBehaviour, IModule
+public class Module : IModule
 {
 
-    public enum ModuleType { HullModule, WeaponModule, None };
+    public enum ModuleType { None , HullModule, WeaponModule };
     protected ModuleType thisModuleType;
-
-    public enum WeaponModuleType { HullModule, WeaponModule, None };
-    protected WeaponModuleType thisWeaponModuleType;
 
     public int hullPoints;
 
@@ -17,7 +14,11 @@ public class Module : MonoBehaviour, IModule
     {
         hullPoints = 0;
         thisModuleType = ModuleType.None;
-        thisWeaponModuleType = WeaponModuleType.None;
         Debug.Log("Module");
+    }
+
+    public void removeModule(PlayerController playerController)
+    {
+
     }
 }

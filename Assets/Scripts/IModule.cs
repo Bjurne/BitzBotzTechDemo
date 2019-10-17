@@ -5,4 +5,6 @@ using UnityEngine;
 public interface IModule
 {
     void IntegrateModule(PlayerController player);
+
+    void removeModule(PlayerController player);
 }

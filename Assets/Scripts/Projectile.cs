@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour
     private bool active = false;
     public string fireingCharacterName;
     public GameObject impactParticlesPrefab;
+    public SpriteRenderer sprite;
 
     private void Awake()
     {
@@ -41,6 +42,12 @@ public class Projectile : MonoBehaviour
                 newImpactFX.transform.SetParent(null);
                 Destroy(newImpactFX, 1f);
                 Destroy(this.gameObject);
+
+                ITakeDamage takeDamageInterface = collision.gameObject.GetComponent<ITakeDamage>();
+                if (takeDamageInterface != null)
+                {
+                    takeDamageInterface.TakeDamage();
+                }
             }
         }
     }

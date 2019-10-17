@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11a1c6a3e5c6d734e900ed0401fe3463, type: 3}
-  m_Name: FlameThrowerGun
+  m_Name: FroggerGun
   m_EditorClassIdentifier: 
-  name: FlameThrowerGun
-  sprite: {fileID: 21300000, guid: d9673d05411210849bbffd76c60d1f37, type: 3}
-  projectilePrefab: {fileID: 7474979750420313728, guid: bec348b0252569c418b2b4a7e8da5e58,
+  name: FroggerGun
+  sprite: {fileID: 21300000, guid: 43eeca6b0801d894f80a52b63cf8982a, type: 3}
+  projectilePrefab: {fileID: 8587131348863668049, guid: baab3abe7c5481c4e8158effc632b9d7,
     type: 3}
-  projectileSpeed: 4
-  coolDown: 0.1
+  projectileSpeed: 5
+  coolDown: 5
   numberOfProjectiles: 1
-  projectileDeviation: 0.05
+  projectileDeviation: 0
   weaponRecoilPower: 0
-  projectilesAreMouseSeeking: 1
+  projectilesAreMouseSeeking: 0

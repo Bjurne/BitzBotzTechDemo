@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Missile : Projectile
+public class MissileTarget : Projectile
 {
-    public GameObject sprite;
+    public GameObject targetSeekingMissile;
     private Rigidbody2D rigidBody;
 
     private void Start()
     {
         rigidBody = GetComponentInParent<Rigidbody2D>();
-        sprite.transform.SetParent(null);
+        targetSeekingMissile.transform.SetParent(null);
     }
 
     private void Update()
@@ -25,6 +25,10 @@ public class Missile : Projectile
 
     private void OnDestroy()
     {
-        if (sprite != null) Destroy(sprite, 5f);
+        if (targetSeekingMissile != null)
+        {
+            targetSeekingMissile.GetComponent<Rigidbody2D>().gravityScale = 1f;
+            Destroy(targetSeekingMissile, 5f);
+        }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponController : MonoBehaviour
+public class WeaponController : MonoBehaviour, ITakeDamage
 {
     private Weapon activeWeapon;
     public List<Weapon> equippedWeapons;
@@ -19,6 +19,16 @@ public class WeaponController : MonoBehaviour
     private Vector3 weaponPosition;
     private float angle;
 
+    public int hullPoints = 25;
+
+    public void TakeDamage()
+    {
+        hullPoints -= 1;
+        if (hullPoints <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     void Start()
     {

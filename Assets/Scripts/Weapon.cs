@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour, IFireWeapon
 {
-    public new string name;
+    public string weaponName;
     public SpriteRenderer weaponSprite;
     public GameObject projectilePrefab;
     public float projectileSpeed;
@@ -22,16 +22,30 @@ public class Weapon : MonoBehaviour, IFireWeapon
 
     public Image reloadImage;
 
+    //public Weapon (WeaponData weaponData, Transform activeWeaponSlot)
+    //{
+    //    this.weaponData = weaponData;
+    //    SetWeaponData();
+    //    this.activeWeaponSlot = activeWeaponSlot;
+    //}
+
     private void Awake()
     {
         SetWeaponData();
+    }
+
+    public void SetupWeapon(WeaponData weaponData, Transform activeWeaponSlot)
+    {
+        this.weaponData = weaponData;
+        SetWeaponData();
+        this.activeWeaponSlot = activeWeaponSlot;
     }
 
     public void SetWeaponData()
     {
         if (weaponData != null)
         {
-            name = weaponData.name;
+            weaponName = weaponData.name;
             weaponSprite.sprite = weaponData.sprite;
             projectilePrefab = weaponData.projectilePrefab;
             projectileSpeed = weaponData.projectileSpeed;
@@ -40,6 +54,8 @@ public class Weapon : MonoBehaviour, IFireWeapon
             projectileDeviation = weaponData.projectileDeviation;
             weaponRecoilPower = weaponData.weaponRecoilPower;
             projectilesAreMouseSeeking = weaponData.projectilesAreMouseSeeking;
+
+            name = weaponName;
         }
     }
 

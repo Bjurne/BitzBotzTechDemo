@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ITakeDamage
 {
     public Rigidbody2D playerRigidBody;
     public float movementSpeed;
@@ -27,23 +27,47 @@ public class PlayerController : MonoBehaviour
     public bool grounded;
     public bool hovering;
 
+    [SerializeField]
     public List<IModule> integratedModules; // A list of modules currently integrated, might come in handy
     public int hullPoints;
 
+    public WeaponData prefferedWeaponData;
+    public Weapon weaponPrefab;
+
+    public int numberOfWeaponSlots;
+
+    public ParticleSystem hoverEffectPS;
+
+    public void TakeDamage()
+    {
+        hullPoints -= 1;
+        if (hullPoints <= 0)
+        {
+            Debug.Log("You ded");
+        }
+    }
 
     private void Start()
     {
+        integratedModules = new List<IModule>();
+        equippedWeapons = new List<Weapon>();
+        foreach (Weapon weapon in GetComponentsInChildren<Weapon>(true))
+        {
+            equippedWeapons.Add(weapon);
+        }
+
         playerRigidBody = GetComponent<Rigidbody2D>();
         jumpVector = new Vector2(0, jumpingPower);
         
         activeWeapon = equippedWeapons[0];
         activeWeapon.gameObject.SetActive(true);
         activeWeapon.transform.SetParent(activeWeaponSlot);
+
+        IntegrateStartModules();
     }
 
-    private void IntegratedStartModules()
+    private void IntegrateStartModules()
     {
-        integratedModules = new List<IModule>();
         while (integratedModules.Count < 5)
         {
             if (integratedModules.Count > 3)
@@ -59,6 +83,34 @@ public class PlayerController : MonoBehaviour
                 integratedModules.Add(module);
             }
         }
+    }
+
+    public void AddModule(Module.ModuleType moduleType)
+    {
+        IModule newModule = new Module();
+        switch (moduleType)
+        {
+            case Module.ModuleType.HullModule:
+                newModule = new HullModule();
+                break;
+            case Module.ModuleType.WeaponModule:
+                newModule = new WeaponModule();
+                break;
+            case Module.ModuleType.None:
+                newModule = new Module();
+                break;
+            default:
+                break;
+        }
+        
+        newModule.IntegrateModule(this);
+        integratedModules.Add(newModule);
+    }
+
+    public void RemoveModule(IModule module)
+    {
+        module.removeModule(this);
+        integratedModules.Remove(module);
     }
 
     public void MovementInput()
@@ -105,24 +157,52 @@ public class PlayerController : MonoBehaviour
         activeWeaponSlot.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
-    public void ChangeActiveWeapon(int x)
+    public bool HasFreeWeaponSlot()
     {
-        Quaternion originalWeaponRotation = activeWeapon.transform.rotation;
-        activeWeapon.StopAllCoroutines();
-        activeWeapon.gameObject.SetActive(false);
-        activeWeapon.transform.SetParent(InactiveWeaponsSlot);
+        if (numberOfWeaponSlots > equippedWeapons.Count)
+        {
+            return true;
+        }
+        else return false;
+    }
 
-        activeWeapon = equippedWeapons[x - 1];
+    public void AddWeapon()
+    {
+        WeaponData newWeaponData = ScriptableObject.CreateInstance<WeaponData>();
+        newWeaponData = prefferedWeaponData;
+        Weapon newWeapon = Instantiate(weaponPrefab, InactiveWeaponsSlot);
+        newWeapon.gameObject.SetActive(false);
+        newWeapon.SetupWeapon(newWeaponData, activeWeaponSlot);
 
-        activeWeapon.gameObject.SetActive(true);
-        activeWeapon.transform.rotation = originalWeaponRotation;
-        activeWeapon.transform.SetParent(activeWeaponSlot);
-        StartCoroutine(activeWeapon.CoolDown());
+        equippedWeapons.Add(newWeapon);
+        ChangeActiveWeapon(equippedWeapons.IndexOf(newWeapon));
+    }
+
+    public void ChangeActiveWeapon(int weaponIndex)
+    {
+        if (weaponIndex <= equippedWeapons.Count -1)
+        {
+            Quaternion originalWeaponRotation = activeWeapon.transform.rotation;
+            activeWeapon.StopAllCoroutines();
+            activeWeapon.gameObject.SetActive(false);
+            activeWeapon.transform.SetParent(InactiveWeaponsSlot);
+
+            activeWeapon = equippedWeapons[weaponIndex];
+
+            activeWeapon.gameObject.SetActive(true);
+            activeWeapon.transform.rotation = originalWeaponRotation;
+            activeWeapon.transform.SetParent(activeWeaponSlot);
+            StartCoroutine(activeWeapon.CoolDown());
+        }
+        else
+        {
+            Debug.LogWarning("Trying to access an unavailable weaponIndex");
+        }
     }
 
     public void FireActiveWeapon()
     {
-        activeWeapon.FireWeapon();
+        if (activeWeapon != null) activeWeapon.FireWeapon();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

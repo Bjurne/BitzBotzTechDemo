@@ -10,4 +10,9 @@ public class HullModule : IModule
         //thisModuleType = ModuleType.HullModule;
         //thisWeaponModuleType = WeaponModuleType.None;
     }
+
+    public void removeModule(PlayerController playerController)
+    {
+        playerController.hullPoints -= 5;
+    }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissileCollision : MonoBehaviour
+public class TargetSeekingMissile : MonoBehaviour
 {
     private bool active = false;
     private Projectile missileTargetProjectile;
@@ -13,7 +13,7 @@ public class MissileCollision : MonoBehaviour
 
     private void Awake()
     {
-        missileTargetProjectile = GetComponentInParent<Missile>();
+        missileTargetProjectile = GetComponentInParent<MissileTarget>();
         rigidBody = GetComponent<Rigidbody2D>();
     }
 
@@ -44,9 +44,10 @@ public class MissileCollision : MonoBehaviour
     private void OnDestroy()
     {
         if (missileTargetProjectile != null) Destroy(missileTargetProjectile.gameObject);
-        GameObject newExplosion = Instantiate(explosionPrefab, this.transform);
-        newExplosion.transform.SetParent(null);
-        Destroy(newExplosion, 1.5f);
+        //GameObject newExplosion = Instantiate(explosionPrefab, this.transform);
+        //newExplosion.transform.SetParent(null);
+        //Destroy(newExplosion, 1.5f);
+        ObjectPoolManager.Instance.SpawnFromPool("Explosion", this.transform.position);
         Destroy(this.gameObject);
     }
 

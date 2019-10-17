@@ -16,6 +16,7 @@ public class MoveCommand : ICommand
 
     public void Execute()
     {
-        playerRigidbody.transform.Translate(velocityX, 0, 0);
+        playerRigidbody.AddForce(new Vector2( velocityX, 0f ));
+        //playerRigidbody.transform.Translate(velocityX, 0, 0);
     }
 }

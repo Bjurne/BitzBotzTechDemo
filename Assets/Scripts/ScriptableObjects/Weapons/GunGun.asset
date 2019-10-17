@@ -21,3 +21,4 @@ MonoBehaviour:
   numberOfProjectiles: 1
   projectileDeviation: 0.02
   weaponRecoilPower: 50
+  projectilesAreMouseSeeking: 0
