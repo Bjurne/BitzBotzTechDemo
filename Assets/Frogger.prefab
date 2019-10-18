@@ -46,7 +46,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 8
+  m_Radius: 12
 --- !u!1 &3587732895434751630
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,11 +98,13 @@ MonoBehaviour:
     type: 3}
   projectileSpeed: 15
   coolDown: 0
-  onCoolDown: 0
   numberOfProjectiles: 0
+  projectileInterval: 0
+  weaponDamage: 0
   projectileDeviation: 0
   weaponRecoilPower: 0
   projectilesAreMouseSeeking: 0
+  onCoolDown: 0
   activeWeaponSlot: {fileID: 4705860155385924200}
   weaponData: {fileID: 11400000, guid: f79b1ab25edf6b24e94bcba210973d4f, type: 2}
   reloadImage: {fileID: 7342038977358776762}
@@ -350,7 +352,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8587131348863668049}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4705860155385924200}
@@ -473,6 +475,7 @@ MonoBehaviour:
   InactiveWeaponsSlot: {fileID: 8242653783852132486}
   weaponSpeed: 5
   hullPoints: 25
+  criticalDamageThreshold: 6
 --- !u!1 &8697660705934531608
 GameObject:
   m_ObjectHideFlags: 0

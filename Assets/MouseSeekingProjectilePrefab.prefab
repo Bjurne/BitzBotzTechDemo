@@ -99,6 +99,8 @@ MonoBehaviour:
   impactParticlesPrefab: {fileID: 1979645945035137476, guid: 1ece7a2e83723e64ba59e96cb9a09139,
     type: 3}
   sprite: {fileID: 5261802169374607325}
+  projectileDamage: 1
+  weaponDamage: 0
   targetSeekingMissile: {fileID: 9065229827749413896}
 --- !u!212 &1302662263059549893
 SpriteRenderer:
@@ -291,6 +293,7 @@ MonoBehaviour:
   maxVelocity: {x: 35, y: 35}
   explosionPrefab: {fileID: 1979645945035137476, guid: 2faf115c403723d4997bdc1e9cd6d850,
     type: 3}
+  directHitDamage: 4
 --- !u!61 &7832768375468786133
 BoxCollider2D:
   m_ObjectHideFlags: 0

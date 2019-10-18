@@ -11,6 +11,8 @@ public class WeaponData : ScriptableObject
     public float projectileSpeed;
     public float coolDown;
     public int numberOfProjectiles;
+    public float projectileInterval;
+    public int weaponDamage;
     public float projectileDeviation;
     public float weaponRecoilPower;
     public bool projectilesAreMouseSeeking;

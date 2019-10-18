@@ -9,12 +9,12 @@ public class BitzBox : MonoBehaviour, ITakeDamage
 
     private SpriteRenderer spriteRenderer;
 
-    public void TakeDamage()
+    public void TakeDamage(int value)
     {
-        hullPoints -= 1;
+        hullPoints -= value;
         if (hullPoints <= 0)
         {
-            Destroy(this.gameObject);
+            ObjectPoolManager.Instance.ReturnObjectHome(this.gameObject);
         }
     }
 
@@ -29,7 +29,7 @@ public class BitzBox : MonoBehaviour, ITakeDamage
 
     }
 
-    private void Start()
+    private void OnEnable()
     {
         if (moduleType == Module.ModuleType.None)
         {

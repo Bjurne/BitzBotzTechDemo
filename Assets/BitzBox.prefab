@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 951347488572926508}
   - component: {fileID: 3620340070453328662}
   - component: {fileID: 6589572925845901182}
+  - component: {fileID: 6725780754157928284}
   m_Layer: 0
   m_Name: BitzBox
   m_TagString: Untagged
@@ -205,6 +206,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030a7a8037fa3ba4b8d2e3c1e56978cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moduleType: 0
+  hullPoints: 3
+--- !u!114 &6725780754157928284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3714149244508497466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b789ccaec4a1d4485e49e39c1685fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secondsBeforeDeactivation: 30
 --- !u!1 &7847829782427544977
 GameObject:
   m_ObjectHideFlags: 0

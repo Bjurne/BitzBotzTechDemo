@@ -98,6 +98,7 @@ MonoBehaviour:
   impactParticlesPrefab: {fileID: 1979645945035137476, guid: bd4f943eabe058b4aa9b7ac3e3734bfd,
     type: 3}
   sprite: {fileID: 5261802169374607325}
+  projectileDamage: 1
 --- !u!1 &9065229827749413896
 GameObject:
   m_ObjectHideFlags: 0

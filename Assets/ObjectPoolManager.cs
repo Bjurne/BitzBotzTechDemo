@@ -43,6 +43,7 @@ public class ObjectPoolManager : MonoBehaviour
             {
                 GameObject newObject = Instantiate(pool.prefab);
                 newObject.SetActive(false);
+                newObject.transform.SetParent(this.transform);
                 objectPool.Enqueue(newObject);
             }
 
@@ -59,11 +60,33 @@ public class ObjectPoolManager : MonoBehaviour
         }
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();
 
+        if (objectToSpawn.activeInHierarchy)
+        {
+            ReturnObjectHome(objectToSpawn);
+        }
+
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
+        objectToSpawn.transform.SetParent(this.transform);
 
         poolDictionary[tag].Enqueue(objectToSpawn);
 
         return objectToSpawn;
+    }
+
+    public void ReturnObjectHome(GameObject returningObject)
+    {
+        returningObject.SetActive(false);
+        returningObject.transform.position = this.transform.position;
+        try
+        {
+            Rigidbody2D rb = returningObject.GetComponent<Rigidbody2D>();
+            rb.velocity = Vector2.zero;
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
     }
 }

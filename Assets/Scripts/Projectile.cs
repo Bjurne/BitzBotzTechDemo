@@ -9,15 +9,16 @@ public class Projectile : MonoBehaviour
     public string fireingCharacterName;
     public GameObject impactParticlesPrefab;
     public SpriteRenderer sprite;
+    public int projectileDamage = 1;
 
-    private void Awake()
+    [HideInInspector]
+    public int weaponDamage = 0;
+
+    private void OnEnable()
     {
+        //weaponDamage = GetComponentInParent<Weapon>().weaponDamage;
         fireingCharacterName = transform.root.gameObject.name;
         Destroy(this.gameObject, secondsActiveBeforeDespawned);
-    }
-
-    void Start()
-    {
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -38,15 +39,16 @@ public class Projectile : MonoBehaviour
         {
             if (active)
             {
-                GameObject newImpactFX = Instantiate(impactParticlesPrefab, this.transform);
-                newImpactFX.transform.SetParent(null);
-                Destroy(newImpactFX, 1f);
+                //GameObject newImpactFX = Instantiate(impactParticlesPrefab, this.transform);
+                //newImpactFX.transform.SetParent(null);
+                //Destroy(newImpactFX, 1f);
+                ObjectPoolManager.Instance.SpawnFromPool("Sparkles", this.transform.position);
                 Destroy(this.gameObject);
 
                 ITakeDamage takeDamageInterface = collision.gameObject.GetComponent<ITakeDamage>();
                 if (takeDamageInterface != null)
                 {
-                    takeDamageInterface.TakeDamage();
+                    takeDamageInterface.TakeDamage(projectileDamage + weaponDamage);
                 }
             }
         }

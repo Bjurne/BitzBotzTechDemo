@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour, ITakeDamage
 
     private Collider2D groundedTrigger; // Not in use right now. Might be needed eventually.
     public bool grounded;
-    public bool hovering;
+    public int hoveringStage;
 
     [SerializeField]
     public List<IModule> integratedModules; // A list of modules currently integrated, might come in handy
@@ -37,8 +37,9 @@ public class PlayerController : MonoBehaviour, ITakeDamage
     public int numberOfWeaponSlots;
 
     public ParticleSystem hoverEffectPS;
+    public ParticleSystem hoverFailEffectPS;
 
-    public void TakeDamage()
+    public void TakeDamage(int value)
     {
         hullPoints -= 1;
         if (hullPoints <= 0)
@@ -120,6 +121,15 @@ public class PlayerController : MonoBehaviour, ITakeDamage
         CommandInvoker.AddCommand(command);
     }
 
+    public void StopInput()
+    {
+        if (grounded)
+        {
+            ICommand command = new StopCommand(playerRigidBody);
+            CommandInvoker.AddCommand(command);
+        }
+    }
+
     public void JumpInput()
     {
         if (grounded)
@@ -127,13 +137,13 @@ public class PlayerController : MonoBehaviour, ITakeDamage
             ICommand command = new SnappyJumpCommand(playerRigidBody, jumpVector);
             CommandInvoker.AddCommand(command);
         }
-        else if (!hovering)
+        else if (hoveringStage < 5)
         {
-            hovering = true;
-            ICommand command = new HoverCommand(playerRigidBody, jumpVector);
+            //hoveringStage += 1;
+            ICommand command = new DashCommand(playerRigidBody, jumpVector);
             CommandInvoker.AddCommand(command);
         }
-        else if (!grounded && hovering)
+        else if (!grounded && hoveringStage >= 5)
         {
             GameObject.FindObjectOfType<MonoScript>().StopAllCoroutines(); //TODO fix proper hovering cancelation
         }
@@ -155,27 +165,6 @@ public class PlayerController : MonoBehaviour, ITakeDamage
         mousePosition.y = mousePosition.y - weaponPosition.y;
         angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
         activeWeaponSlot.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-    }
-
-    public bool HasFreeWeaponSlot()
-    {
-        if (numberOfWeaponSlots > equippedWeapons.Count)
-        {
-            return true;
-        }
-        else return false;
-    }
-
-    public void AddWeapon()
-    {
-        WeaponData newWeaponData = ScriptableObject.CreateInstance<WeaponData>();
-        newWeaponData = prefferedWeaponData;
-        Weapon newWeapon = Instantiate(weaponPrefab, InactiveWeaponsSlot);
-        newWeapon.gameObject.SetActive(false);
-        newWeapon.SetupWeapon(newWeaponData, activeWeaponSlot);
-
-        equippedWeapons.Add(newWeapon);
-        ChangeActiveWeapon(equippedWeapons.IndexOf(newWeapon));
     }
 
     public void ChangeActiveWeapon(int weaponIndex)
@@ -205,11 +194,32 @@ public class PlayerController : MonoBehaviour, ITakeDamage
         if (activeWeapon != null) activeWeapon.FireWeapon();
     }
 
+    public bool HasFreeWeaponSlot()
+    {
+        if (numberOfWeaponSlots > equippedWeapons.Count)
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    public void AddWeapon()
+    {
+        WeaponData newWeaponData = ScriptableObject.CreateInstance<WeaponData>();
+        newWeaponData = prefferedWeaponData;
+        Weapon newWeapon = Instantiate(weaponPrefab, InactiveWeaponsSlot);
+        newWeapon.gameObject.SetActive(false);
+        newWeapon.SetupWeapon(newWeaponData, activeWeaponSlot);
+
+        equippedWeapons.Add(newWeapon);
+        ChangeActiveWeapon(equippedWeapons.IndexOf(newWeapon));
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("GroundPlatform"))
         {
-            hovering = false;
+            hoveringStage = 0;
             grounded = true;
             //GameObject.FindObjectOfType<MonoScript>().StopAllCoroutines();
         }

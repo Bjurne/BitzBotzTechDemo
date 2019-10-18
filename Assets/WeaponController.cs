@@ -20,10 +20,16 @@ public class WeaponController : MonoBehaviour, ITakeDamage
     private float angle;
 
     public int hullPoints = 25;
+    public int criticalDamageThreshold = 6;
 
-    public void TakeDamage()
+    public void TakeDamage(int value)
     {
-        hullPoints -= 1;
+        hullPoints -= value;
+        if (value >= criticalDamageThreshold)
+        {
+            ObjectPoolManager.Instance.SpawnFromPool("Explosion", this.transform.position);
+            Destroy(this.gameObject);
+        }
         if (hullPoints <= 0)
         {
             Destroy(this.gameObject);

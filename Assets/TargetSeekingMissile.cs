@@ -9,6 +9,7 @@ public class TargetSeekingMissile : MonoBehaviour
     private Rigidbody2D rigidBody;
     public Vector2 maxVelocity = new Vector2(35f, 35f);
     public GameObject explosionPrefab;
+    public int directHitDamage;
 
 
     private void Awake()
@@ -57,6 +58,12 @@ public class TargetSeekingMissile : MonoBehaviour
         {
             if (active)
                 {
+                ITakeDamage takeDamageInterface = collision.gameObject.GetComponent<ITakeDamage>();
+                if (takeDamageInterface != null)
+                {
+                    takeDamageInterface.TakeDamage(directHitDamage);
+                }
+
                 if (missileTargetProjectile != null) Destroy(missileTargetProjectile.gameObject);
                     Destroy(this.gameObject);
                 }

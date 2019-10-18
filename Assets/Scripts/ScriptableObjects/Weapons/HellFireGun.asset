@@ -17,8 +17,10 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7474979750420313728, guid: 9c7d90422018ce24a86944dbc3c50afb,
     type: 3}
   projectileSpeed: 6
-  coolDown: 1
+  coolDown: 4
   numberOfProjectiles: 6
-  projectileDeviation: 0.4
+  projectileInterval: 10
+  weaponDamage: 0
+  projectileDeviation: 0.3
   weaponRecoilPower: 150
   projectilesAreMouseSeeking: 1

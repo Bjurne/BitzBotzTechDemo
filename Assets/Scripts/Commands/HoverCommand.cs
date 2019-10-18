@@ -21,6 +21,7 @@ public class HoverCommand : ICommand
     public IEnumerator Hover()
     {
         PlayerController playerController = playerRigidbody.GetComponent<PlayerController>();
+        playerController.hoveringStage += 5;
 
         for (int i = 0; i < 30; i++)
         {

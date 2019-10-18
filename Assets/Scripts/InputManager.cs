@@ -24,6 +24,11 @@ public class InputManager : MonoBehaviour
             playerController.MovementInput();
         }
 
+        if (Input.GetKey(KeyCode.S))
+        {
+            playerController.StopInput();
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerController.JumpInput();

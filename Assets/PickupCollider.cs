@@ -17,7 +17,7 @@ public class PickupCollider : MonoBehaviour
         {
             PlayerController playerController = collision.GetComponent<PlayerController>();
             thisBitzBox.PickedUp(playerController);
-            Destroy(thisBitzBox.gameObject);
+            ObjectPoolManager.Instance.ReturnObjectHome(thisBitzBox.gameObject);
         }
     }
 }

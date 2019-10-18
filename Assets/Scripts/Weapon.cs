@@ -10,11 +10,13 @@ public class Weapon : MonoBehaviour, IFireWeapon
     public GameObject projectilePrefab;
     public float projectileSpeed;
     public float coolDown;
-    public bool onCoolDown;
     public int numberOfProjectiles = 1;
+    public float projectileInterval;
+    public int weaponDamage;
     public float projectileDeviation;
     public float weaponRecoilPower;
     public bool projectilesAreMouseSeeking;
+    public bool onCoolDown;
 
     public Transform activeWeaponSlot;
 
@@ -51,6 +53,8 @@ public class Weapon : MonoBehaviour, IFireWeapon
             projectileSpeed = weaponData.projectileSpeed;
             coolDown = weaponData.coolDown;
             numberOfProjectiles = weaponData.numberOfProjectiles;
+            projectileInterval = weaponData.projectileInterval;
+            weaponDamage = weaponData.weaponDamage;
             projectileDeviation = weaponData.projectileDeviation;
             weaponRecoilPower = weaponData.weaponRecoilPower;
             projectilesAreMouseSeeking = weaponData.projectilesAreMouseSeeking;
@@ -69,7 +73,7 @@ public class Weapon : MonoBehaviour, IFireWeapon
             //FireMouseSeekingMissileShot();
             //FireRifleShot();
             //FireBirdshot();
-            FireWeaponMasterFunction();
+            StartCoroutine(FireWeaponMasterFunction());
         }
     }
 
@@ -106,7 +110,7 @@ public class Weapon : MonoBehaviour, IFireWeapon
         newProjectile.GetComponent<Rigidbody2D>().AddForce(activeWeaponSlot.right * projectileSpeed);
     }
 
-    public void FireWeaponMasterFunction()
+    public IEnumerator FireWeaponMasterFunction()
     {
         for (int i = 0; i < numberOfProjectiles; i++)
         {
@@ -124,7 +128,9 @@ public class Weapon : MonoBehaviour, IFireWeapon
             //Vector2 playerVelocity = GetComponentInParent<PlayerController>().playerRigidBody.velocity; // <---- TODO solve. Since we dont apply force for movement, this number means nothing
             Vector3 thisProjectileTrajectory = new Vector3(activeWeaponSlot.right.x + newDeviationX, activeWeaponSlot.right.y + newDeviationY, 0f);
             newProjectile.GetComponent<Rigidbody2D>().AddForce(thisProjectileTrajectory * projectileSpeed);
+            yield return new WaitForSeconds(projectileInterval / 100f);
         }
+        yield return null;
     }
 
     public IEnumerator Recoil()

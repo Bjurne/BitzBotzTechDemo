@@ -14,7 +14,8 @@ public class BitzBoxSpawner : MonoBehaviour
         else
         {
             time = 0f;
-            Instantiate(bitzBoxPrefab, transform.position, Quaternion.identity);
+            //Instantiate(bitzBoxPrefab, transform.position, Quaternion.identity);
+            ObjectPoolManager.Instance.SpawnFromPool("BitzBox", this.transform.position);
         }
     }
 }
