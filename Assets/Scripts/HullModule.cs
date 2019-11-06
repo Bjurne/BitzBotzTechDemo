@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HullModule : IModule
+public class HullModule : Module
 {
-    public void IntegrateModule(PlayerController playerController)
+    public override void IntegrateModule(PlayerController playerController)
     {
+        Debug.Log("Integrating HullModule");
         playerController.hullPoints += 5;
         //thisModuleType = ModuleType.HullModule;
         //thisWeaponModuleType = WeaponModuleType.None;
     }
 
-    public void removeModule(PlayerController playerController)
+    public override void removeModule(PlayerController playerController)
     {
         playerController.hullPoints -= 5;
     }

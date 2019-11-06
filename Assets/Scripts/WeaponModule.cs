@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponModule : IModule
+public class WeaponModule : Module
 {
 
-    public void IntegrateModule(PlayerController playerController)
+    public override void IntegrateModule(PlayerController playerController)
     {
         if (playerController.HasFreeWeaponSlot())
         {
@@ -17,7 +17,7 @@ public class WeaponModule : IModule
         }
     }
 
-    public void removeModule(PlayerController playerController)
+    public override void removeModule(PlayerController playerController)
     {
         //Remove weaponModule
     }

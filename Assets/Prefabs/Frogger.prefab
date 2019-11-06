@@ -108,6 +108,7 @@ MonoBehaviour:
   activeWeaponSlot: {fileID: 4705860155385924200}
   weaponData: {fileID: 11400000, guid: f79b1ab25edf6b24e94bcba210973d4f, type: 2}
   reloadImage: {fileID: 7342038977358776762}
+  baseProjectilePrefab: {fileID: 0}
 --- !u!1 &3942539147376640249
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,7 +423,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 3.5
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -474,6 +475,7 @@ MonoBehaviour:
   activeWeaponSlot: {fileID: 4705860155385924200}
   InactiveWeaponsSlot: {fileID: 8242653783852132486}
   weaponSpeed: 5
+  acquiredTarget: {fileID: 0}
   hullPoints: 25
   criticalDamageThreshold: 6
 --- !u!1 &8697660705934531608

@@ -40,6 +40,12 @@ public class BitzBox : MonoBehaviour, ITakeDamage
         SetSprite();
     }
 
+    private void OnDisable()
+    {
+        // TODO Make this less ugly. When the pool manager disables the object in its setup-loop, returnObjectHome is called from here, which makes Unity angry - since it is allready manipulating the object.
+        if (gameObject.activeInHierarchy) ObjectPoolManager.Instance.ReturnObjectHome(this.gameObject);
+    }
+
     private void SetSprite()
     {
         switch (moduleType)
@@ -49,6 +55,9 @@ public class BitzBox : MonoBehaviour, ITakeDamage
                 break;
             case Module.ModuleType.WeaponModule:
                 spriteRenderer.color = Color.red;
+                break;
+            case Module.ModuleType.AerialTechModule:
+                spriteRenderer.color = Color.blue;
                 break;
             case Module.ModuleType.None:
                 spriteRenderer.color = Color.black;
@@ -60,6 +69,6 @@ public class BitzBox : MonoBehaviour, ITakeDamage
 
     public void PickedUp(PlayerController playerController)
     {
-        playerController.AddModule(moduleType);
+        playerController.moduleManager.AddModule(moduleType);
     }
 }

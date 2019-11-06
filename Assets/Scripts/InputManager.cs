@@ -66,6 +66,11 @@ public class InputManager : MonoBehaviour
         {
             playerController.ChangeActiveWeapon(4);
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            playerController.ChangeActiveWeapon(playerController.previouslyActiveWeaponIndex);
+        }
     }
 
     private void RotateActiveWeaponWithKeyboard()

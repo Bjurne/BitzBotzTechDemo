@@ -22,5 +22,5 @@ MonoBehaviour:
   projectileInterval: 10
   weaponDamage: 0
   projectileDeviation: 0.3
-  weaponRecoilPower: 150
+  weaponRecoilPower: 450
   projectilesAreMouseSeeking: 1

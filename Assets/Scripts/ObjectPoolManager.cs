@@ -51,7 +51,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    public GameObject SpawnFromPool(string tag, Vector2 position)
+    public GameObject SpawnFromPool(string tag, Vector2 position, GameObject spawningCharacter = null)
     {
         if (!poolDictionary.ContainsKey(tag))
         {
@@ -60,9 +60,19 @@ public class ObjectPoolManager : MonoBehaviour
         }
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();
 
+        if (objectToSpawn == null) return null;
+
         if (objectToSpawn.activeInHierarchy)
         {
             ReturnObjectHome(objectToSpawn);
+        }
+
+        if (tag == "Projectile") 
+        {
+            if (spawningCharacter != null)
+            {
+                objectToSpawn.transform.SetParent(spawningCharacter.transform);
+            }
         }
 
         objectToSpawn.SetActive(true);
@@ -76,17 +86,18 @@ public class ObjectPoolManager : MonoBehaviour
 
     public void ReturnObjectHome(GameObject returningObject)
     {
-        returningObject.SetActive(false);
-        returningObject.transform.position = this.transform.position;
+        if (returningObject.activeInHierarchy) returningObject.SetActive(false);
+        if (returningObject.transform.position != transform.position) returningObject.transform.position = this.transform.position;
+        if (returningObject.transform.parent != transform) returningObject.transform.SetParent(this.transform);
         try
         {
             Rigidbody2D rb = returningObject.GetComponent<Rigidbody2D>();
             rb.velocity = Vector2.zero;
+            if (rb.gravityScale < 0) rb.gravityScale *= -1;
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-
-            throw;
+            throw e;
         }
     }
 }

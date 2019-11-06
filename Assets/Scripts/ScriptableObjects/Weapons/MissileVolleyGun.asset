@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a1c6a3e5c6d734e900ed0401fe3463, type: 3}
+  m_Name: MissileVolleyGun
+  m_EditorClassIdentifier: 
+  name: MissileVolleyGun
+  sprite: {fileID: 21300000, guid: 43eeca6b0801d894f80a52b63cf8982a, type: 3}
+  projectilePrefab: {fileID: 7474979750420313728, guid: 9c7d90422018ce24a86944dbc3c50afb,
+    type: 3}
+  projectileSpeed: 12
+  coolDown: 3
+  numberOfProjectiles: 3
+  projectileInterval: 15
+  weaponDamage: 0
+  projectileDeviation: 0.01
+  weaponRecoilPower: 500
+  projectilesAreMouseSeeking: 0

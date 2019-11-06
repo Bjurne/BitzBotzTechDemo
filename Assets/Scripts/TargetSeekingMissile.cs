@@ -10,6 +10,8 @@ public class TargetSeekingMissile : MonoBehaviour
     public Vector2 maxVelocity = new Vector2(35f, 35f);
     public GameObject explosionPrefab;
     public int directHitDamage;
+    public float blastRadius;
+    public float explosionForce;
 
 
     private void Awake()
@@ -57,16 +59,63 @@ public class TargetSeekingMissile : MonoBehaviour
         if (collision.gameObject.layer != LayerMask.NameToLayer("TriggerArea"))
         {
             if (active)
-                {
+            {
                 ITakeDamage takeDamageInterface = collision.gameObject.GetComponent<ITakeDamage>();
                 if (takeDamageInterface != null)
                 {
                     takeDamageInterface.TakeDamage(directHitDamage);
                 }
 
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, blastRadius);
+
+                foreach (Collider2D nearbyObject in colliders)
+                {
+                    if (nearbyObject.gameObject == this.gameObject) continue;
+                    if (nearbyObject.GetComponent<Projectile>()) continue;
+
+                    Rigidbody2D rb = nearbyObject.GetComponent<Rigidbody2D>();
+                    if (rb != null)
+                    {
+                        rb.AddExplosionForce(explosionForce, this.transform.position, 500, 0.5f, ForceMode2D.Impulse);
+                    }
+                }
+
                 if (missileTargetProjectile != null) Destroy(missileTargetProjectile.gameObject);
                     Destroy(this.gameObject);
+            }
+
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer != LayerMask.NameToLayer("TriggerArea"))
+        {
+            if (active)
+            {
+                ITakeDamage takeDamageInterface = collision.gameObject.GetComponent<ITakeDamage>();
+                if (takeDamageInterface != null)
+                {
+                    takeDamageInterface.TakeDamage(directHitDamage);
                 }
+
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, blastRadius);
+
+                foreach (Collider2D nearbyObject in colliders)
+                {
+                    if (nearbyObject.gameObject == this.gameObject) continue;
+                    if (nearbyObject.GetComponent<Projectile>()) continue;
+
+                    Rigidbody2D rb = nearbyObject.GetComponent<Rigidbody2D>();
+                    if (rb != null)
+                    {
+                        rb.AddExplosionForce(explosionForce, this.transform.position, 500, 0.5f, ForceMode2D.Impulse);
+                    }
+                }
+
+                if (missileTargetProjectile != null) Destroy(missileTargetProjectile.gameObject);
+                Destroy(this.gameObject);
+            }
 
         }
     }

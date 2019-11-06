@@ -18,11 +18,15 @@ public class Weapon : MonoBehaviour, IFireWeapon
     public bool projectilesAreMouseSeeking;
     public bool onCoolDown;
 
+    private float timeSinceLastShot;
+
     public Transform activeWeaponSlot;
 
     public WeaponData weaponData;
 
     public Image reloadImage;
+
+    public GameObject baseProjectilePrefab;
 
     //public Weapon (WeaponData weaponData, Transform activeWeaponSlot)
     //{
@@ -34,6 +38,12 @@ public class Weapon : MonoBehaviour, IFireWeapon
     private void Awake()
     {
         SetWeaponData();
+    }
+
+    private void OnEnable()
+    {
+        timeSinceLastShot = 0f;
+        onCoolDown = true;
     }
 
     public void SetupWeapon(WeaponData weaponData, Transform activeWeaponSlot)
@@ -67,7 +77,8 @@ public class Weapon : MonoBehaviour, IFireWeapon
     {
         if (!onCoolDown)
         {
-            StartCoroutine(CoolDown());
+            onCoolDown = true;
+            //StartCoroutine(CoolDown());
             StartCoroutine(Recoil());
 
             //FireMouseSeekingMissileShot();
@@ -114,7 +125,15 @@ public class Weapon : MonoBehaviour, IFireWeapon
     {
         for (int i = 0; i < numberOfProjectiles; i++)
         {
-            GameObject newProjectile = Instantiate(projectilePrefab, activeWeaponSlot);
+            GameObject newProjectile = null;
+            if (projectilePrefab == baseProjectilePrefab)
+            {
+                newProjectile = ObjectPoolManager.Instance.SpawnFromPool("Projectile", activeWeaponSlot.position, transform.root.gameObject);
+            }
+            else
+            {
+                newProjectile = Instantiate(projectilePrefab, activeWeaponSlot);
+            }
             float newDeviationX = Random.Range(-projectileDeviation, projectileDeviation);
             float newDeviationY = Random.Range(-projectileDeviation, projectileDeviation);
             if (numberOfProjectiles < 1)
@@ -125,7 +144,7 @@ public class Weapon : MonoBehaviour, IFireWeapon
             {
                 newProjectile.transform.SetParent(null);
             }
-            //Vector2 playerVelocity = GetComponentInParent<PlayerController>().playerRigidBody.velocity; // <---- TODO solve. Since we dont apply force for movement, this number means nothing
+            //Vector2 playerVelocity = GetComponentInParent<PlayerController>().playerRigidBody.velocity; // <---- TODO solve. See if we can add the players velocity to projectiles without making them go haywire
             Vector3 thisProjectileTrajectory = new Vector3(activeWeaponSlot.right.x + newDeviationX, activeWeaponSlot.right.y + newDeviationY, 0f);
             newProjectile.GetComponent<Rigidbody2D>().AddForce(thisProjectileTrajectory * projectileSpeed);
             yield return new WaitForSeconds(projectileInterval / 100f);
@@ -144,20 +163,35 @@ public class Weapon : MonoBehaviour, IFireWeapon
         yield return null;
     }
 
-    public IEnumerator CoolDown()
+    private void FixedUpdate()
     {
-        float timeSinceLastShot = 0;
-        onCoolDown = true;
-
-        while (timeSinceLastShot < coolDown)
+        if (onCoolDown)
         {
-            yield return new WaitForSeconds(0.05f);
-            timeSinceLastShot += Time.deltaTime * 10f;
+            timeSinceLastShot += Time.deltaTime;
             reloadImage.fillAmount = timeSinceLastShot / coolDown;
+            if (timeSinceLastShot >= coolDown)
+            {
+                reloadImage.fillAmount = 0f;
+                timeSinceLastShot = 0f;
+                onCoolDown = false;
+            }
         }
-
-        reloadImage.fillAmount = 0f;
-        onCoolDown = false;
-        yield return null;
     }
+
+    //public IEnumerator CoolDown()
+    //{
+    //    float timeSinceLastShot = 0;
+    //    onCoolDown = true;
+
+    //    while (timeSinceLastShot < coolDown)
+    //    {
+    //        yield return new WaitForSeconds(0.05f);
+    //        timeSinceLastShot += Time.deltaTime * 10f;
+    //        reloadImage.fillAmount = timeSinceLastShot / coolDown;
+    //    }
+
+    //    reloadImage.fillAmount = 0f;
+    //    onCoolDown = false;
+    //    yield return null;
+    //}
 }

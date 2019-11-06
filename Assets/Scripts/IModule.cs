@@ -4,7 +4,9 @@ using UnityEngine;
 
 public interface IModule
 {
-    void IntegrateModule(PlayerController player);
+    void IntegrateModule(PlayerController playerController);
 
-    void removeModule(PlayerController player);
+    void removeModule(PlayerController playerController);
+
+    void activateModuleSpecial(PlayerController playerController);
 }

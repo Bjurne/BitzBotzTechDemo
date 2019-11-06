@@ -13,7 +13,8 @@ public class WeaponController : MonoBehaviour, ITakeDamage
     private float weaponDegrees;
     public float weaponSpeed;
 
-    private GameObject acquiredTarget;
+    [HideInInspector]
+    public GameObject acquiredTarget;
 
     private Vector3 targetPosition;
     private Vector3 weaponPosition;

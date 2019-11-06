@@ -19,5 +19,8 @@ MonoBehaviour:
   projectileSpeed: 3
   coolDown: 3
   numberOfProjectiles: 36
+  projectileInterval: 0
+  weaponDamage: 0
   projectileDeviation: 1
   weaponRecoilPower: 500
+  projectilesAreMouseSeeking: 0

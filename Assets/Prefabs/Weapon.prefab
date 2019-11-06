@@ -45,18 +45,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3dd70fbcfee3194ea56b853169863ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  weaponName: 
   weaponSprite: {fileID: 753328340902054794}
   projectilePrefab: {fileID: 7474979750420313728, guid: 63093790221b0cb48ad12af3ee920155,
     type: 3}
   projectileSpeed: 15
   coolDown: 0
-  onCoolDown: 0
   numberOfProjectiles: 0
+  projectileInterval: 0
+  weaponDamage: 0
   projectileDeviation: 0
+  weaponRecoilPower: 0
+  projectilesAreMouseSeeking: 0
+  onCoolDown: 0
   activeWeaponSlot: {fileID: 0}
   weaponData: {fileID: 0}
   reloadImage: {fileID: 8433880157519073217}
+  baseProjectilePrefab: {fileID: 7474979750420313728, guid: 63093790221b0cb48ad12af3ee920155,
+    type: 3}
 --- !u!1 &2763440688029615746
 GameObject:
   m_ObjectHideFlags: 0

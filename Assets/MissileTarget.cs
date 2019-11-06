@@ -31,4 +31,15 @@ public class MissileTarget : Projectile
             Destroy(targetSeekingMissile, 5f);
         }
     }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer != LayerMask.NameToLayer("TriggerArea"))
+        {
+            if (active)
+            {
+                ObjectPoolManager.Instance.ReturnObjectHome(this.gameObject);
+            }
+        }
+    }
 }
