@@ -22,7 +22,7 @@ public class MovingState : IState
     public void Enter()
     {
         secondsOfNoInput = 0f;
-        Debug.Log("New state - MovingState - ");
+        //Debug.Log("New state - MovingState - ");
     }
 
     public void Execute()
@@ -44,6 +44,6 @@ public class MovingState : IState
 
     public void Exit()
     {
-        Debug.Log("leaving state - MovingState");
+        //Debug.Log("leaving state - MovingState");
     }
 }

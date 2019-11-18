@@ -32,10 +32,11 @@ public class PlayerController : MonoBehaviour, ITakeDamage
 
     private Collider2D groundedTrigger;
     public bool grounded;
-    public int hoveringStage;
+    public int aerialStage;
 
     
     public int hullPoints;
+    public int criticalDamageThreshold;
 
     public WeaponData prototypeWeaponData;
     public Weapon weaponPrefab;
@@ -52,13 +53,32 @@ public class PlayerController : MonoBehaviour, ITakeDamage
 
     public void TakeDamage(int value)
     {
-        stateMachine.ChangeState(new StallingState(stateMachine, StallingCycleCompleted, 1f));
-        hullPoints -= 1;
-        if (CountEquippedWeapons() > 0) RemoveWeapon();
+        hullPoints -= value;
+        if (value >= criticalDamageThreshold)
+        {
+            stateMachine.ChangeState(new StallingState(stateMachine, StallingCycleCompleted, 1f));
+            moduleManager.RemoveRandomModule();
+            moduleManager.RemoveRandomModule();
+            moduleManager.RemoveRandomModule();
+        }
         if (hullPoints <= 0)
         {
-            Debug.Log("You ded");
+            Respawn();
         }
+    }
+
+    private void Respawn()
+    {
+        Debug.Log("You ded");
+        //moduleManager.RemoveAllModules();
+        //foreach (Weapon weapon in equippedWeapons)
+        //{
+        //    RemoveWeapon(System.Array.IndexOf(equippedWeapons, weapon));
+        //}
+        transform.position = new Vector2(-24f, 8f);
+        playerRigidBody.velocity = Vector2.zero;
+        hullPoints = 15;
+        //moduleManager.IntegrateStartModules();
     }
 
     private void Awake()
@@ -122,7 +142,7 @@ public class PlayerController : MonoBehaviour, ITakeDamage
 
         if (stateMachine.currentlyRunningState == stateMachine.currentlyRunningState as IdleState)
         {
-            stateMachine.ChangeState(new MovingState(playerRigidBody, movementSpeed, 10f, IdlingLoopRestart));
+            stateMachine.ChangeState(new SnappyMovingState(this, playerRigidBody, movementSpeed, 10f, IdlingLoopRestart));
         }
     }
 
@@ -130,8 +150,8 @@ public class PlayerController : MonoBehaviour, ITakeDamage
     {
         if (grounded)
         {
-            ICommand command = new StopCommand(playerRigidBody);
-            CommandInvoker.AddCommand(command);
+            //ICommand command = new StopCommand(playerRigidBody);
+            //CommandInvoker.AddCommand(command);
         }
     }
 
@@ -147,15 +167,18 @@ public class PlayerController : MonoBehaviour, ITakeDamage
 
             //moduleManager.currentAerialModule.activateModuleSpecial(this);
         }
-        else if (hoveringStage < 5)
+        else if (aerialStage < 5)
         {
             //hoveringStage += 1;
             //ICommand command = new DashCommand(playerRigidBody, jumpVector);
             //CommandInvoker.AddCommand(command);
             //stateMachine.ChangeState(new DashingState(playerRigidBody, this, jumpVector, stateMachine));
-            moduleManager.currentAerialModule.activateModuleSpecial(this);
+            if (moduleManager.currentAerialModule != null)
+            {
+                moduleManager.currentAerialModule.activateModuleSpecial(this);
+            }
         }
-        else if (!grounded && hoveringStage >= 5)
+        else if (!grounded && aerialStage >= 5)
         {
             GameObject.FindObjectOfType<MonoScript>().StopAllCoroutines(); //TODO fix proper hovering cancelation
         }
@@ -242,14 +265,7 @@ public class PlayerController : MonoBehaviour, ITakeDamage
 
     private WeaponData SetPrototypeWeapon()
     {
-        int nextWeaponIndex = CountEquippedWeapons();
-        foreach (Weapon weapon in equippedWeapons)
-        {
-            if (weapon == null)
-            {
-                nextWeaponIndex = (System.Array.IndexOf(equippedWeapons, weapon));
-            }
-        }
+        int nextWeaponIndex = SetNextWeaponIndex();
         if (moduleManager.prototypeWeaponDatas[nextWeaponIndex] != null)
         {
             prototypeWeaponData = moduleManager.prototypeWeaponDatas[nextWeaponIndex];
@@ -257,67 +273,110 @@ public class PlayerController : MonoBehaviour, ITakeDamage
         return prototypeWeaponData;
     }
 
+    public int SetNextWeaponIndex()
+    {
+        int nextWeaponIndex = -1;
+        foreach (Weapon weapon in equippedWeapons)
+        {
+            if (weapon == null)
+            {
+                nextWeaponIndex = (System.Array.IndexOf(equippedWeapons, weapon));
+                return nextWeaponIndex;
+            }
+        }
+        return nextWeaponIndex;
+    }
+
+    //public void AddWeapon()
+    //{
+    //    WeaponData newWeaponData = ScriptableObject.CreateInstance<WeaponData>();
+    //    SetPrototypeWeapon();
+    //    newWeaponData = prototypeWeaponData;
+    //    Weapon newWeapon = Instantiate(weaponPrefab, InactiveWeaponsSlot);
+    //    newWeapon.gameObject.SetActive(false);
+    //    newWeapon.SetupWeapon(newWeaponData, activeWeaponSlot);
+
+    //    int listPlace = -1;
+
+    //    foreach (WeaponData weaponData in moduleManager.prototypeWeaponDatas)
+    //    {
+    //        if (weaponData == newWeaponData)
+    //        {
+    //            //listPlace = prototypeWeaponDatas.IndexOf( prototypeWeaponDatas, weaponData);
+    //            listPlace = System.Array.IndexOf(moduleManager.prototypeWeaponDatas, weaponData);
+    //            //Debug.Log(newWeaponData + " added to equippedWeapons at index " + listPlace);
+    //        }
+    //    }
+
+    //    // TODO fix this mess. Unsafe af.
+    //    if (listPlace != -1) equippedWeapons[listPlace] = newWeapon;
+    //    else
+    //    {
+    //        //equippedWeapons.Add(newWeapon);
+    //        Debug.LogWarning("Weapon inserted incorrectly into PlayerController equippedWeapons");
+    //    }
+    //    //int newWeaponIndex = System.Array.IndexOf(equippedWeapons, newWeapon);
+    //    ChangeActiveWeapon(System.Array.IndexOf(equippedWeapons, newWeapon));
+    //}
+
     public void AddWeapon()
     {
+        int newWeaponIndex = SetNextWeaponIndex();
         WeaponData newWeaponData = ScriptableObject.CreateInstance<WeaponData>();
-        SetPrototypeWeapon();
-        newWeaponData = prototypeWeaponData;
+        newWeaponData = moduleManager.GetPrototypeWeaponData(newWeaponIndex);
         Weapon newWeapon = Instantiate(weaponPrefab, InactiveWeaponsSlot);
         newWeapon.gameObject.SetActive(false);
         newWeapon.SetupWeapon(newWeaponData, activeWeaponSlot);
-
-        int listPlace = -1;
-
-        foreach (WeaponData weaponData in moduleManager.prototypeWeaponDatas)
-        {
-            if (weaponData == newWeaponData)
-            {
-                //listPlace = prototypeWeaponDatas.IndexOf( prototypeWeaponDatas, weaponData);
-                listPlace = System.Array.IndexOf(moduleManager.prototypeWeaponDatas, weaponData);
-                //Debug.Log(newWeaponData + " added to equippedWeapons at index " + listPlace);
-            }
-        }
-
-        // TODO fix this mess. Unsafe af.
-        if (listPlace != -1) equippedWeapons[listPlace] = newWeapon;
-        else
-        {
-            //equippedWeapons.Add(newWeapon);
-            Debug.LogWarning("Weapon inserted incorrectly into PlayerController equippedWeapons");
-        }
-        //int newWeaponIndex = System.Array.IndexOf(equippedWeapons, newWeapon);
-        ChangeActiveWeapon(System.Array.IndexOf(equippedWeapons, newWeapon));
+        
+        equippedWeapons[newWeaponIndex] = newWeapon;
+        if (activeWeapon == null) ChangeActiveWeapon(System.Array.IndexOf(equippedWeapons, newWeapon));
     }
 
-    public void RemoveWeapon()
+    //public void RemoveWeapon()
+    //{
+    //    //TODO: fix so that lost weapons reappear in the same keyboard number slot after being removed and readded.
+    //    //This will allow us to eject random weapon, without making it weird.
+
+    //    int randomWeaponIndex = Random.Range(0, equippedWeapons.Length);
+    //    Debug.Log("randomWeaponIndex: " + randomWeaponIndex);
+    //    //prototypeWeaponDatas.Add(equippedWeapons[randomWeaponIndex].weaponData);
+
+    //    if (equippedWeapons[randomWeaponIndex] == null)
+    //    {
+    //        Debug.Log("No weapon destroyed this time");
+    //        return;
+    //    }
+
+    //    Debug.Log("trying to remove " + equippedWeapons[randomWeaponIndex] + " from equippedWeapons at index " + randomWeaponIndex);
+
+    //    GameObject weaponToDestroy = equippedWeapons[randomWeaponIndex].gameObject;
+
+    //    equippedWeapons[randomWeaponIndex] = null;
+    //    //foreach (Weapon weapon in equippedWeapons)
+    //    //{
+    //    //    if (weapon != null) Debug.Log(weapon.name + " is in equippedWeapons at index " + System.Array.IndexOf(equippedWeapons, weapon));
+    //    //}
+
+    //    Destroy(weaponToDestroy);
+    //    //Debug.Log("trying to Destroy " + equippedWeapons[randomWeaponIndex].name);
+    //    GameObject spawnedBitBox = ObjectPoolManager.Instance.SpawnFromPool("BitzBox", transform.position);
+    //    spawnedBitBox.GetComponent<Rigidbody2D>().AddForce((UnityEngine.Random.insideUnitCircle * 10f), ForceMode2D.Impulse);
+    //}
+
+    public void RemoveWeapon(int weaponIndex)
     {
-        //TODO: fix so that lost weapons reappear in the same keyboard number slot after being removed and readded.
-        //This will allow us to eject random weapon, without making it weird.
-
-        int randomWeaponIndex = Random.Range(0, equippedWeapons.Length);
-        Debug.Log("randomWeaponIndex: " + randomWeaponIndex);
-        //prototypeWeaponDatas.Add(equippedWeapons[randomWeaponIndex].weaponData);
-
-        if (equippedWeapons[randomWeaponIndex] == null)
+        if (equippedWeapons[weaponIndex] != null)
         {
-            Debug.Log("No weapon destroyed this time");
-            return;
+            GameObject weaponToDestroy = equippedWeapons[weaponIndex].gameObject;
+
+            equippedWeapons[weaponIndex] = null;
+
+            Destroy(weaponToDestroy);
         }
-
-        Debug.Log("trying to remove " + equippedWeapons[randomWeaponIndex] + " from equippedWeapons at index " + randomWeaponIndex);
-
-        GameObject weaponToDestroy = equippedWeapons[randomWeaponIndex].gameObject;
-
-        equippedWeapons[randomWeaponIndex] = null;
-        //foreach (Weapon weapon in equippedWeapons)
-        //{
-        //    if (weapon != null) Debug.Log(weapon.name + " is in equippedWeapons at index " + System.Array.IndexOf(equippedWeapons, weapon));
-        //}
-
-        Destroy(weaponToDestroy);
-        //Debug.Log("trying to Destroy " + equippedWeapons[randomWeaponIndex].name);
-        GameObject spawnedBitBox = ObjectPoolManager.Instance.SpawnFromPool("BitzBox", transform.position);
-        spawnedBitBox.GetComponent<Rigidbody2D>().AddForce((UnityEngine.Random.insideUnitCircle * 10f), ForceMode2D.Impulse);
+        else
+        {
+            Debug.LogWarning("Trying to remove null weapon at equippedWeapons[" + weaponIndex + "]");
+        }
     }
 
     private int CountEquippedWeapons()
@@ -327,7 +386,7 @@ public class PlayerController : MonoBehaviour, ITakeDamage
         {
             if (weapon != null) weaponCount++;
         }
-        Debug.Log("WeaponCount: " + weaponCount);
+        //Debug.Log("WeaponCount: " + weaponCount);
         return weaponCount;
     }
 
@@ -335,7 +394,7 @@ public class PlayerController : MonoBehaviour, ITakeDamage
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("GroundPlatform"))
         {
-            hoveringStage = 0;
+            aerialStage = 0;
             grounded = true;
             stateMachine.ChangeState(new IdleState(10f, IdlingLoopRestart));
         }
@@ -346,20 +405,20 @@ public class PlayerController : MonoBehaviour, ITakeDamage
         if (collision.gameObject.layer == LayerMask.NameToLayer("GroundPlatform"))
         {
             //grounded = false;
-            Debug.Log("lämnar groundplatform");
+            //Debug.Log("lämnar groundplatform");
             stateMachine.ChangeState(new AirbornState(this));
         }
     }
 
-    private void IdlingLoopRestart(IdlingResults idlingResults)
+    public void IdlingLoopRestart(IdlingResults idlingResults)
     {
-        Debug.Log("Idle loop restarted after " + idlingResults.timeIdled + "seconds.");
+        //Debug.Log("Idle loop restarted after " + idlingResults.timeIdled + "seconds.");
         stateMachine.ChangeState(new IdleState(10f, IdlingLoopRestart));
     }
 
     private void StallingCycleCompleted(StallingResults stallingResults)
     {
-        Debug.Log("Stalling cycle completed after " + stallingResults.timeStalled + "seconds.");
+        //Debug.Log("Stalling cycle completed after " + stallingResults.timeStalled + "seconds.");
         stateMachine.ChangeState(new IdleState(10f, IdlingLoopRestart));
     }
 }

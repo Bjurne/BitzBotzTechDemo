@@ -27,6 +27,10 @@ public class ModuleManager : MonoBehaviour
 
     public IState aerialTechState;
 
+    public IState aerialTechLevelOneState;
+    public IState aerialTechLevelTwoState;
+    public IState aerialTechLevelThreeState;
+
     //public ModuleManager(PlayerController playerController)
     //{
     //    this.playerController = playerController;
@@ -52,6 +56,13 @@ public class ModuleManager : MonoBehaviour
     //    return newStateType;
     //}
 
+    private void Awake()
+    {
+        aerialTechLevelOneState = NegativeGravityState();
+        aerialTechLevelTwoState = ReversedDashingState();
+        aerialTechLevelThreeState = DashingState();
+    }
+
     private void Start()
     {
         integratedModules = new List<IModule>();
@@ -66,27 +77,38 @@ public class ModuleManager : MonoBehaviour
         if (prototypeWeaponDatas[weaponIndex] != null) return prototypeWeaponDatas[weaponIndex];
         else
         {
-            Debug.Log("Trying to access unavailable prototype weapon data: prototypeWeaponDatas[" + weaponIndex + "]");
+            Debug.LogWarning("Trying to access unavailable prototype weapon data: prototypeWeaponDatas[" + weaponIndex + "]");
             return null;
         }
     }
 
     public IState GetCurrentAerialTechState()
     {
-        if (aerialTechLevel > 10)
+        if (aerialTechLevel < 10)
         {
-            aerialTechState = new DashingState(playerController.playerRigidBody, playerController, playerController.jumpVector, playerController.stateMachine);
+            aerialTechState = aerialTechLevelOneState;
+            Debug.Log("AerialTechLevel is - " + aerialTechLevel + " , " + aerialTechState);
+        }
+        else if (aerialTechLevel < 25)
+        {
+            aerialTechState = aerialTechLevelTwoState;
             Debug.Log("AerialTechLevel is - " + aerialTechLevel + " , " + aerialTechState);
         }
         else
         {
-            aerialTechState = new HoveringState(playerController.playerRigidBody, playerController, playerController.jumpVector, playerController.stateMachine);
+            aerialTechState = aerialTechLevelThreeState;
             Debug.Log("AerialTechLevel is - " + aerialTechLevel + " , " + aerialTechState);
         }
+
+        if (aerialTechState == null)
+        {
+            aerialTechState = new IdleState(10f, playerController.IdlingLoopRestart);
+        }
+
         return aerialTechState;
     }
 
-    private void IntegrateStartModules()
+    public void IntegrateStartModules()
     {
         while (integratedModules.Count < 5)
         {
@@ -141,5 +163,60 @@ public class ModuleManager : MonoBehaviour
     {
         module.removeModule(playerController);
         integratedModules.Remove(module);
+    }
+
+    public void RemoveRandomModule()
+    {
+        if (integratedModules.Count > 0)
+        {
+            int randomModuleIndex = Random.Range(0, integratedModules.Count);
+            if (integratedModules[randomModuleIndex] != null)
+            {
+                RemoveModule(integratedModules[randomModuleIndex]);
+            }
+        }
+    }
+
+    public void RemoveAllModules()
+    {
+        foreach (Module module in integratedModules)
+        {
+            RemoveModule(module);
+        }
+    }
+
+    public IState NegativeGravityState()
+    {
+        IState newState = new NegativeGravityState(playerController);
+        Debug.Log("new NegativeGravityState created, - " + newState + playerController);
+        return newState;
+    }
+
+    public IState ReversedDashingState()
+    {
+        IState newState = new ReversedDashingState(playerController.playerRigidBody, playerController, playerController.jumpVector, playerController.stateMachine);
+        Debug.Log("new ReversedDashingState created, - " + newState + playerController.playerRigidBody + playerController + playerController.jumpVector + playerController.stateMachine);
+        return newState;
+    }
+
+    public IState DashingState()
+    {
+        IState newState = new DashingState(playerController.playerRigidBody, playerController, playerController.jumpVector, playerController.stateMachine);
+        Debug.Log("new DashingState created, - " + newState + playerController.playerRigidBody + playerController + playerController.jumpVector + playerController.stateMachine);
+        return newState;
+    }
+
+    public IState HoveringState()
+    {
+        IState newState = new HoveringState(playerController.playerRigidBody, playerController, playerController.jumpVector, playerController.stateMachine);
+        Debug.Log("new HoveringState created, - " + newState + playerController.playerRigidBody + playerController + playerController.jumpVector + playerController.stateMachine);
+        return newState;
+    }
+
+    public IState JetPackState()
+    {
+        IState newState = new JetPackState(playerController.playerRigidBody, playerController, playerController.jumpVector, playerController.stateMachine);
+        Debug.Log("new JetPackState created, - " + newState + playerController.playerRigidBody + playerController + playerController.jumpVector + playerController.stateMachine);
+        return newState;
     }
 }

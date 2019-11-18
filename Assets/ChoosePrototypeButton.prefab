@@ -106,7 +106,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7907282017914879488}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -228,11 +228,28 @@ MonoBehaviour:
   prototypeType: 0
   prototypeChoices:
   - type: 0
-    name: 
-    sprite: {fileID: 0}
+    name: GunGun
+    sprite: {fileID: 21300000, guid: d2f189cedfa8e4149a80dd289d424f78, type: 3}
+    weaponData: {fileID: 11400000, guid: 9b2de754fa1f2c447acbce19716f888e, type: 2}
   - type: 0
-    name: 
-    sprite: {fileID: 0}
+    name: ShotGun
+    sprite: {fileID: 21300000, guid: aaca56af14ef911458656f4e5453c3cf, type: 3}
+    weaponData: {fileID: 11400000, guid: 6f39f478faa0099468b38b748758944f, type: 2}
+  - type: 0
+    name: MachineGun
+    sprite: {fileID: 21300000, guid: aaca56af14ef911458656f4e5453c3cf, type: 3}
+    weaponData: {fileID: 11400000, guid: b31caf585ce4d95419d27f945c66f27f, type: 2}
+  - type: 0
+    name: MissileVolleyGun
+    sprite: {fileID: 21300000, guid: aaca56af14ef911458656f4e5453c3cf, type: 3}
+    weaponData: {fileID: 11400000, guid: abb5fc224a08e5f4a95ea4f0f7d4f033, type: 2}
+  - type: 0
+    name: OPGun
+    sprite: {fileID: 21300000, guid: aaca56af14ef911458656f4e5453c3cf, type: 3}
+    weaponData: {fileID: 11400000, guid: 148bbc2a64091c84bad4d65b30ddb835, type: 2}
   spacingBetweenButtons: 56
+  nameText: {fileID: 1683559722075564575}
   prototypeChoiceButtonPrefab: {fileID: 2828512111268867032, guid: ede121ba2ca6ec640a07849b864428d3,
     type: 3}
+  moduleManager: {fileID: 0}
+  targetPrototypeWeaponIndex: 0

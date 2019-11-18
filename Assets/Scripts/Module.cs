@@ -12,15 +12,15 @@ public abstract class Module : IModule
 
     public virtual void IntegrateModule(PlayerController playerController)
     {
-        hullPoints = 0;
         thisModuleType = ModuleType.None;
         Debug.LogWarning("Trying to integrate a Type.None module");
-
     }
 
     public virtual void removeModule(PlayerController playerController)
     {
-        Debug.LogWarning("Trying to remove a Type.None module");
+        GameObject spawnedBitBox = ObjectPoolManager.Instance.SpawnFromPool("BitzBox", playerController.transform.position);
+        spawnedBitBox.GetComponent<BitzBox>().SetType(thisModuleType);
+        spawnedBitBox.GetComponent<Rigidbody2D>().AddForce((UnityEngine.Random.insideUnitCircle * 10f), ForceMode2D.Impulse);
     }
 
     public virtual void activateModuleSpecial(PlayerController player)

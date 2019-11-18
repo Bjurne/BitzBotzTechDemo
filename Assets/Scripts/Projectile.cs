@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float secondsActiveBeforeDespawned;
-    protected bool active = false;
+    public bool active = false;
     public string fireingCharacterName;
     public GameObject impactParticlesPrefab;
     public SpriteRenderer sprite;
@@ -64,6 +64,13 @@ public class Projectile : MonoBehaviour
         {
             if (active)
             {
+                if (collision.name == "ProjectilePrefab(Clone)")
+                {
+                    if (collision.GetComponent<Projectile>().fireingCharacterName == fireingCharacterName)
+                    {
+                        return;
+                    }
+                }
                 //GameObject newImpactFX = Instantiate(impactParticlesPrefab, this.transform);
                 //newImpactFX.transform.SetParent(null);
                 //Destroy(newImpactFX, 1f);
@@ -86,10 +93,12 @@ public class Projectile : MonoBehaviour
         //{
         //    Destroy(this.gameObject);
         //}
-        if (collision.gameObject.layer != LayerMask.NameToLayer("TriggerArea") && collision.gameObject.name != fireingCharacterName)
+        if (collision.gameObject.layer != LayerMask.NameToLayer("TriggerArea") && collision.gameObject.name != fireingCharacterName && collision.name != "ProjectilePrefab(Clone)")
         {
             if (active)
             {
+                Debug.Log(name + " OnTriggerStay collided with " + collision.name);
+
                 //GameObject newImpactFX = Instantiate(impactParticlesPrefab, this.transform);
                 //newImpactFX.transform.SetParent(null);
                 //Destroy(newImpactFX, 1f);

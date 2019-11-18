@@ -40,6 +40,12 @@ public class BitzBox : MonoBehaviour, ITakeDamage
         SetSprite();
     }
 
+    public void SetType(Module.ModuleType newModuleType)
+    {
+        this.moduleType = newModuleType;
+        SetSprite();
+    }
+
     private void OnDisable()
     {
         // TODO Make this less ugly. When the pool manager disables the object in its setup-loop, returnObjectHome is called from here, which makes Unity angry - since it is allready manipulating the object.

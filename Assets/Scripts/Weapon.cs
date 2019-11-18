@@ -138,7 +138,7 @@ public class Weapon : MonoBehaviour, IFireWeapon
             float newDeviationY = Random.Range(-projectileDeviation, projectileDeviation);
             if (numberOfProjectiles < 1)
             {
-                newProjectile.transform.Translate(UnityEngine.Random.insideUnitCircle / 10f);
+                newProjectile.transform.Translate(UnityEngine.Random.insideUnitCircle / 2f);
             }
             if (!projectilesAreMouseSeeking)
             {

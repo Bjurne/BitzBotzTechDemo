@@ -478,6 +478,7 @@ MonoBehaviour:
   acquiredTarget: {fileID: 0}
   hullPoints: 25
   criticalDamageThreshold: 6
+  respawnTime: 0
 --- !u!1 &8697660705934531608
 GameObject:
   m_ObjectHideFlags: 0

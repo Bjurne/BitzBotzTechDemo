@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DashingState : IState
 {
-    Vector2 jumpVector;
+    protected Vector2 jumpVector;
     Rigidbody2D jumpingBody;
     StateMachine stateMachine;
     PlayerController playerController;
@@ -19,11 +19,11 @@ public class DashingState : IState
 
     public void Enter()
     {
-        Debug.Log("New state - DashingState");
+        Debug.Log("New state - DashingState. Jumpvector = " + jumpVector);
 
         if (Mathf.Abs(jumpingBody.velocity.y) < 6f && Mathf.Abs(jumpingBody.velocity.x) < 6f)
         {
-            playerController.hoveringStage += 2;
+            playerController.aerialStage += 2;
 
             Vector2 dashDirection = playerController.activeWeaponSlot.right;
 

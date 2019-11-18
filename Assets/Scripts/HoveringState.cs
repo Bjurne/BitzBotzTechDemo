@@ -8,8 +8,7 @@ public class HoveringState : IState
     Rigidbody2D jumpingBody;
     StateMachine stateMachine;
     PlayerController playerController;
-
-    private bool hovering;
+    float movementSpeed;
 
     public HoveringState(Rigidbody2D jumpingBody, PlayerController playerController, Vector2 jumpVector, StateMachine stateMachine)
     {
@@ -17,17 +16,21 @@ public class HoveringState : IState
         this.jumpVector = jumpVector;
         this.stateMachine = stateMachine;
         this.playerController = playerController;
+        movementSpeed = playerController.movementSpeed;
     }
 
     public void Enter()
     {
-        Debug.Log("New state - HoveringState");
+        //Debug.Log("New state - HoveringState");
         GameObject.FindObjectOfType<MonoScript>().StartCoroutine(Hover());
         //hovering = false;
     }
 
     public void Execute()
     {
+        float x = Input.GetAxis("Horizontal") * Time.deltaTime * movementSpeed;
+        playerController.playerRigidBody.AddForce(new Vector2(x, 0f));
+
         //if (!hovering)
         //{
         //    hovering = true;
@@ -54,7 +57,7 @@ public class HoveringState : IState
         //        }
         //    }
 
-            
+
         //    for (int i = 0; i < numberOfThrusts; i++)
         //    {
         //        if (timer < timerGoal)
@@ -91,13 +94,13 @@ public class HoveringState : IState
 
     public void Exit()
     {
-        Debug.Log("Leaving state - DashingState");
+        //Debug.Log("Leaving state - HoveringState");
     }
 
     public IEnumerator Hover()
     {
         PlayerController playerController = jumpingBody.GetComponent<PlayerController>();
-        playerController.hoveringStage += 5;
+        playerController.aerialStage += 5;
 
         for (int i = 0; i < 30; i++)
         {

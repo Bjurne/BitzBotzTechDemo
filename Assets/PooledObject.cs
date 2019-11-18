@@ -19,11 +19,10 @@ public class PooledObject : MonoBehaviour
 
     public void Deactivate()
     {
-        //gameObject.SetActive(false);
         StartCoroutine(DeactivationBlinking());
     }
+    
 
-    //TODO fix this? Make pooled objects blink a couple of times before díssapearing.Broke everything as is.
     private IEnumerator DeactivationBlinking()
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();

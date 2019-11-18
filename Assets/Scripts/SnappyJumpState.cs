@@ -19,7 +19,7 @@ public class SnappyJumpState : IState
         jumpingBody.transform.Translate(Vector2.up * 0.25f);
         jumpingBody.AddForce(jumpVector);
 
-        Debug.Log("New state - SnappyJumpState");
+        //Debug.Log("New state - SnappyJumpState");
 
         stateMachine.SwitchToPreviousState();
     }
@@ -31,6 +31,6 @@ public class SnappyJumpState : IState
 
     public void Exit()
     {
-        Debug.Log("Leaving state - SnappyJumpState - ");
+        //Debug.Log("Leaving state - SnappyJumpState - ");
     }
 }

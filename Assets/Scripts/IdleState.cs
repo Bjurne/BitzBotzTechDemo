@@ -18,7 +18,7 @@ public class IdleState : IState
     public void Enter()
     {
         timeSpentIdling = 0f;
-        Debug.Log("New state - Idle - " + timeToIdle + " seconds.");
+        //Debug.Log("New state - Idle - " + timeToIdle + " seconds.");
     }
 
     public void Execute()
@@ -39,7 +39,7 @@ public class IdleState : IState
 
     public void Exit()
     {
-        Debug.Log("leaving state - Idle");
+        //Debug.Log("leaving state - Idle");
     }
 
 }

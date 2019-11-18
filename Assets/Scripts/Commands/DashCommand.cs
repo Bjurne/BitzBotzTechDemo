@@ -19,7 +19,7 @@ public class DashCommand : ICommand
     {
         if (Mathf.Abs(playerRigidbody.velocity.y) < 6f && Mathf.Abs(playerRigidbody.velocity.x) < 6f)
         {
-            playerController.hoveringStage += 2;
+            playerController.aerialStage += 2;
 
             Vector2 dashDirection = playerController.activeWeaponSlot.right;
 

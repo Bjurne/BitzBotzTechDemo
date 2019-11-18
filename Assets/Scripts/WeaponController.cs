@@ -23,17 +23,38 @@ public class WeaponController : MonoBehaviour, ITakeDamage
     public int hullPoints = 25;
     public int criticalDamageThreshold = 6;
 
+    public float respawnTime;
+
     public void TakeDamage(int value)
     {
         hullPoints -= value;
         if (value >= criticalDamageThreshold)
         {
+            ObjectPoolManager.Instance.SpawnFromPool("BitzBox", this.transform.position);
+            ObjectPoolManager.Instance.SpawnFromPool("BitzBox", this.transform.position);
+            ObjectPoolManager.Instance.SpawnFromPool("BitzBox", this.transform.position);
             ObjectPoolManager.Instance.SpawnFromPool("Explosion", this.transform.position);
-            Destroy(this.gameObject);
+            if (respawnTime != 0f)
+            {
+                gameObject.SetActive(false);
+                Invoke("Respawn", respawnTime);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
         if (hullPoints <= 0)
         {
-            Destroy(this.gameObject);
+            if (respawnTime != 0f)
+            {
+                gameObject.SetActive(false);
+                Invoke("Respawn", respawnTime);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -42,6 +63,12 @@ public class WeaponController : MonoBehaviour, ITakeDamage
         activeWeapon = equippedWeapons[0];
         activeWeapon.gameObject.SetActive(true);
         activeWeapon.transform.SetParent(activeWeaponSlot);
+    }
+
+    void Respawn()
+    {
+        hullPoints = 25;
+        gameObject.SetActive(true);
     }
     
     //void Update()

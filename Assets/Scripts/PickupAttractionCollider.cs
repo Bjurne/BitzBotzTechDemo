@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PickupAttractionCollider : MonoBehaviour
 {
-    Rigidbody2D rb;
+    protected Rigidbody2D rb;
     public float attractionForce = 25f;
-    private bool active;
+    protected bool active;
 
     private void OnEnable()
     {
@@ -20,7 +20,7 @@ public class PickupAttractionCollider : MonoBehaviour
         active = true;
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    protected virtual void OnTriggerStay2D(Collider2D collision)
     {
         if (active && collision.tag == "Player")
         {

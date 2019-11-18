@@ -20,7 +20,7 @@ public class StallingState : IState
     public void Enter()
     {
         timeSpentStalling = 0f;
-        Debug.Log("New state - Stalling - " + timeToStall + " seconds.");
+        //Debug.Log("New state - Stalling - " + timeToStall + " seconds.");
     }
 
     public void Execute()
@@ -51,7 +51,7 @@ public class StallingState : IState
     {
         //stateMachine.currentlyRunningState = stateMachine.previouslyRunningState;
         //Debug.Log("leaving state - Stalling - Resetting Previous State");
-        Debug.Log("leaving state - StallingState");
+        //Debug.Log("leaving state - StallingState");
     }
 }
 

@@ -6,11 +6,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public Rigidbody2D playerRigidbody;
-    
-
     public PlayerController playerController;
-
-    
 
     void Update()
     {
@@ -70,6 +66,18 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             playerController.ChangeActiveWeapon(playerController.previouslyActiveWeaponIndex);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Time.timeScale != 0f)
+            {
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+            }
         }
     }
 
